@@ -1,4 +1,5 @@
 {% load cart_template_tags %}
+{% load static %}
 
 <!-- Navbar -->
 <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
@@ -7,7 +8,7 @@
         <!-- Brand -->
         <!-- The Logo at the top -->
         <a class="navbar-brand waves-effect" href="{% url 'core:Home' %}">
-            <img src="/media/Logo_EcoPlastile.png" alt ="Company Logo" height="50">
+            <img src="{% static 'img/ecoplastic/Logo_EcoPlastile.png' %}" alt ="Company Logo" height="50">
         </a>
 
         <!-- Collapse -->
@@ -45,7 +46,7 @@
             <!-- Hide cart if used is not logged in-->
                 {% if request.user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link waves-effect">
+                    <a href = "{% url 'core:order-summary' %}" class="nav-link waves-effect">
                         <span class="badge red z-depth-1 mr-1"> {{ request.user|crt_itm_cnt }} </span>
                         <i class="fas fa-shopping-cart"></i>
                         <span class="clearfix d-none d-sm-inline-block"> Cart </span>

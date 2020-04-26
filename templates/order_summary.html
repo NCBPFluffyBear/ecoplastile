@@ -7,59 +7,76 @@
     <div class="container">
 
         <div class="table-responsive text-nowrap">
-
+        <h2>Order Summary</h2>
             <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Heading</th>
-                        <th scope="col">Heading</th>
-                        <th scope="col">Heading</th>
-                        <th scope="col">Heading</th>
-                        <th scope="col">Heading</th>
-                        <th scope="col">Heading</th>
-                        <th scope="col">Heading</th>
-                        <th scope="col">Heading</th>
-                        <th scope="col">Heading</th>
+                        <th scope="col">Item name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total Price</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for order_item in object.items.all %}
                     <tr>
-                        <th scope="row">1</th>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ order_item.title }}</td>
+                        <td>
+                            {% if order_item.item.discount_price %}
+                                <span class="mr-1">
+                                    <del>${{ order_item.item.price }}</del>
+                                </span>
+                                <span> ${{ order_item.item.discount_price }} </span>
+                            {% else %}
+                                ${{ order_item.item.price }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href ="{% url 'core:remove-single-from-cart' order_item.item.slug %}"><i class ="fas fa-minus mr-2"></i></a>
+                            {{ order_item.quantity }} 
+                            <a href ="{% url 'core:add-to-cart' order_item.item.slug %}"><i class ="fas fa-plus ml-2"></i></a>
+                        </td>
+                        <td>
+                            {% if order_item.item.discount_price %}
+                                ${{order_item.get_total_discount_item_price}}
+                                
+                                <span class="badge badge-success" style="margin-left: .5rem; height: 1rem">Saving ${{order_item.get_amt_svd}}</span>
+                            {% else %}
+                                ${{order_item.get_total_item_price}}
+                            {% endif %}
+                            <a style = "color: red" href ="{% url 'core:remove-from-cart' order_item.item.slug %}">
+                                <i class="fas fa-trash-alt float-right"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan='5'>Your cart is empty</td>
                     </tr>
                     <tr>
-                        <th scope="row">2</th>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
+                        <td colspan="5">
+                            <a class = 'btn btn-dark float-right' href='/'>Continue Shopping</a>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                    {% if object.get_total %}
+                    <tr>
+                        <!-- Allows it to be right aligned -->
+                        <td colspan = "4"><b>Final Price</b></td>
+                        <td> ${{ object.get_total }}</td>
                     </tr>
                     <tr>
-                        <th scope="row">3</th>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
+                        <td colspan="5">
+                            <!-- First item gets added before second duh.. -->
+                            <a class = 'btn btn-warning float-right ml-2' href='/checkout/'>Proceed to checkout</a>
+                            <a class = 'btn btn-dark float-right' href='/'>Continue Shopping</a>
+                        </td>
                     </tr>
+                    {% endif %}
                 </tbody>
             </table>
 
