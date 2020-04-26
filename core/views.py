@@ -29,6 +29,10 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
     return render(request, "product-page.html", context) """
 
 
+def AboutView(request):
+    return render(request, "about-page.html", {})
+
+
 # either primary key or slug
 class ProductView(DetailView):
     model = Item
@@ -63,9 +67,11 @@ class OrderSummary(LoginRequiredMixin, View):
 class CheckoutView(View):
     def get(self, *args, **kwargs):
         # The form
+        order = Order.objects.get(user=self.request.user, ordered=False)
         form = CheckoutForm()
         context = {
-            'form': form
+            'order': order,
+            'form': form,
         }
         return render(self.request, "checkout-page.html", context)
 
@@ -118,7 +124,7 @@ class PaymentView(View):
         # order
         order = Order.objects.get(user=self.request.user, ordered=False)
         context = {
-            'order': order
+            'order': order,
         }
         return render(self.request, "payment.html", context)
 

@@ -22,6 +22,10 @@
 
             <!-- Left -->
             <ul class="navbar-nav mr-auto">
+                
+                <li class="nav-item">
+                    <a class="nav-link waves-effect" href="{% url 'core:About' %}">About</a>
+                </li>
 
                 <!-- May be userful -->
                 <!-- <li class="nav-item active">
@@ -45,13 +49,18 @@
                 
             <!-- Hide cart if used is not logged in-->
                 {% if request.user.is_authenticated %}
+
                 <li class="nav-item">
                     <a href = "{% url 'core:order-summary' %}" class="nav-link waves-effect">
-                        <span class="badge red z-depth-1 mr-1"> {{ request.user|crt_itm_cnt }} </span>
+                        <!-- Checks too see if there is any items at all -->    
+                        {% if request.user|crt_itm_cnt > 0 %}
+                            <span class="badge red z-depth-1 mr-1"> {{ request.user|crt_itm_cnt }} </span>
+                        {% endif %}
                         <i class="fas fa-shopping-cart"></i>
                         <span class="clearfix d-none d-sm-inline-block"> Cart </span>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link waves-effect" href="{% url 'account_logout' %}">
                         <span class="clearfix d-none d-sm-inline-block"> Logout </span>
@@ -81,12 +90,13 @@
                     </a>
                 </li>
                 -->
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a href="https://github.com/DerpyCoder/EarthHacks20"
                         class="nav-link border border-light rounded waves-effect" target="_blank">
                         <i class="fab fa-github mr-2"></i>GitHub
                     </a>
-                </li>
+                </li> -->
+                
             </ul>
 
         </div>

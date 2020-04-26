@@ -10,9 +10,10 @@ from django_countries.fields import CountryField
 
 # How the items are stored
 CATEGORY_CHOICES = (
-    ('S', 'Shirt'),
-    ('SW', 'Sport wear'),
-    ('OW', 'Outwear'),
+    ('S', 'Sell'),
+    ('B', 'Buy'),
+    ('H', 'Hardware'),
+    # ('OW', 'Outwear'),
 )
 
 
@@ -31,12 +32,16 @@ class Item(models.Model):
     label = models.CharField(choices=LABEL_CHOICES, max_length=1)
     slug = models.SlugField()
     description = models.TextField()
+    additional_description = models.TextField(blank=True, null=True)
 
     # Length of each max length abbreviation
 
     # computes the "informal" string representations of an object
     def __str__(self):
         return self.title
+
+    # def __slug__(self):
+    #     return self.slug
 
     def get_absolute_url(self):
         return reverse("core:Product", kwargs={'slug': self.slug})

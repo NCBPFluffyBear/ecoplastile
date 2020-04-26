@@ -5,7 +5,7 @@ media
 .DS_Store
 *.sqlite3
 *.env
-db.sqlite3
+#db.sqlite3
 
 # Accept these files in the repository
 !.gitignore
