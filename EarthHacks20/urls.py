@@ -4,8 +4,12 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    # admin panel
     path('admin/', admin.site.urls),
+    # account panel
     path('accounts/', include('allauth.urls')),
+    # imports urls from the core
+    path('', include('core.urls', namespace='core')),
 ]
 
 if settings.DEBUG:

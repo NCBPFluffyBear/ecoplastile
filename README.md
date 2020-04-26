@@ -1,3 +1,9 @@
+# To run the server
+
+1. Make sure you have Python installed
+2. run env/Scripts/activate
+3. Then run python manage.py runserver
+
 # Django Project Boilerplate
 
 This repository is a boilerplate Django project for quickly getting started.

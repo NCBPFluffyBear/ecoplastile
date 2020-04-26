@@ -1,27 +1,63 @@
 from django.conf import settings
 from django.db import models
+from django.shortcuts import reverse
 
 # Create your models here.
 
 # Logic of storing order, adding item to order
 # Store bool if ordered
 
+# How the items are stored
+CATEGORY_CHOICES = (
+    ('S', 'Shirt'),
+    ('SW', 'Sport wear'),
+    ('OW', 'Outwear'),
+)
+
+
+LABEL_CHOICES = (
+    ('P', 'primary'),  # Blue Color
+    ('S', 'secondary'),  # Purple ish color
+    ('D', 'danger'),  # Red Color
+)
+
 
 class Item(models.Model):
     title = models.CharField(max_length=100)
+    price = models.FloatField()
+    discount_price = models.FloatField(blank=True, null=True)
+    category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
+    label = models.CharField(choices=LABEL_CHOICES, max_length=1)
+    slug = models.SlugField()
+    description = models.TextField()
+
+    # Length of each max length abbreviation
 
     # computes the "informal" string representations of an object
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse("core:Product", kwargs={'slug': self.slug})
+
+    def get_add_to_cart_url(self):
+        return reverse("core:add-to-cart", kwargs={'slug': self.slug})
+
+    def get_remove_from_cart_url(self):
+        return reverse("core:remove-from-cart", kwargs={'slug': self.slug})
+
 
 # Links Order and Item
 class OrderItem(models.Model):
-    item = models.ForeignKey(max_length=100)
-    price = models.FloatField()
+    # Cascade dletes all items and its references
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    ordered = models.BooleanField(default=False)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
 
+    # what the item is stored as in the database
     def __str__(self):
-        return self.title
+        return f"{self.quantity} of {self.item.title}"
 
 
 class Order(models.Model):
