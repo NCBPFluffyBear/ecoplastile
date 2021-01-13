@@ -95,6 +95,7 @@ def main(check_env, deploying):
             subprocess.check_call(azure_firewall_command)
             print("Allowing access from local IP...")
             subprocess.check_call(local_ip_firewall_command)
+            print("Hello :)")
 
         create_app_db = input('Create App DB? [y/n]: ')
         if create_app_db == 'y':
